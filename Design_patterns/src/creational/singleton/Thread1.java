@@ -37,7 +37,11 @@ public class Thread1 extends Thread{
  */
 	@Override
 	public void run() {
-		SingletonDesignPattern s=SingletonDesignPattern.getInstance();
+		try {
+			SingletonDesignPattern s=SingletonDesignPattern.getInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println(Thread.currentThread().getName());	
 	}	
 }

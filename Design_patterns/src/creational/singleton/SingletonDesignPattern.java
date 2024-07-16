@@ -2,15 +2,16 @@ package creational.singleton;
 
 import java.io.Serializable;
 
-public class SingletonDesignPattern implements Serializable{
+public class SingletonDesignPattern implements Serializable,Cloneable{
 
 	String name="manu";
 	
 	static SingletonDesignPattern  s=null;
 	
 	//private constructor so no one can create a object outside of class
-	private SingletonDesignPattern(){
-		
+	private SingletonDesignPattern() throws Exception{
+		//to handle reflection to not create object if it is created previously
+		if(s!=null) throw new Exception();
 	}
 	/*
 	//here we are maintaining the synchronized kw because when we use two threads 
@@ -40,21 +41,27 @@ public class SingletonDesignPattern implements Serializable{
 	*/
 	//here we are doing DOUBLE checked locking for bcs if s gets instance
 	//we are not even allowing it to enter into synchronized block
-	static  SingletonDesignPattern getInstance() {
-		if(s==null) {
-			synchronized(s) {
+	static  SingletonDesignPattern getInstance() throws Exception {
+//		if(s==null) {
+//			synchronized(s) {
 				if(s==null) {
 					s=new SingletonDesignPattern();
 					return s;
 				}
-			}
-		}
+//			}
+//		}
 		return s;
 	}
 //	whenerver readObject() in ObjectInputStream is called there is read resolve method
 //	it is responsible to create new object so we override that method
 //	When it is getting (deserialized)
 	Object readResolve(){
+		return s;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+//		we can return same object s
 		return s;
 	}
 }
